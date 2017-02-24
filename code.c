@@ -3,22 +3,30 @@
 #include <pthread.h>
 #include <time.h>   
 
-#define PRODUCERS 20
-#define CONSUMERS 30
-#define BUFFER_SIZE 1000
-#define REQUEST 10000000
-
 void *add_item();
 void *remove_item();
 void *append_buffer();
 void *remove_buffer();
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-int buffer[BUFFER_SIZE] = {0}, tail = 0, head = 0, request = 0, success = 0;
+int PRODUCERS, CONSUMERS, BUFFER_SIZE, REQUEST;
+int buffer[100000];
+int tail = 0, head = 0, request = 0, success = 0;
 clock_t timer1, timer2;
 
-void main()
+void main(int argc, char *argv[])
 {
+    if(argc>4) {
+        sscanf(argv[1], "%d", &PRODUCERS);
+        sscanf(argv[2], "%d", &CONSUMERS);
+        sscanf(argv[3], "%d", &BUFFER_SIZE);
+        sscanf(argv[4], "%d", &REQUEST);
+    }
+    else {
+        printf("need argument PRODUCERS CONSUMERS BUFFER_SIZE REQUEST\n");
+        return;
+    }
+    
     timer1 = clock();   //Pull present cpu clock1
     
     pthread_t thread_producer[PRODUCERS];
@@ -74,9 +82,9 @@ void *append_buffer() {
                 request++;
                 //printf(" + thread %ld append success\n", pthread_self());
             }
-            else {
+            //else {
                 //printf("Buffer overflow\n");
-            }
+            //}
             pthread_mutex_unlock(&mutex);
         }
     }
@@ -85,16 +93,16 @@ void *append_buffer() {
 
 void *remove_buffer() {
     //printf("Remove thread number %ld\n", pthread_self());
-    while(request<REQUEST) {
-        if(!pthread_mutex_trylock(&mutex) && request<REQUEST) {
+    while(success<REQUEST) {
+        if(!pthread_mutex_trylock(&mutex) && success<REQUEST) {
             if(buffer[tail] == 1) {
                 remove_item();
                 success++;
                 //printf(" - thread %ld remove success\n", pthread_self());
             }
-            else {
+            //else {
                 //printf("Buffer underflow\n");
-            }
+            //}
             pthread_mutex_unlock(&mutex);
         }
     }
