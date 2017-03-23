@@ -10,13 +10,13 @@ Use C Complier also IDE such as MinGW, Visual studio, Codeblock, etc.
 ex.
 > code 4 4 1000 100000
 
-[+] Producers 4, Consumers 4
-[+] Buffer size 1000
-[+] Requests 100000
-
-[+] Successfully consumed 100000 requests (100.0%)
-[+] Elapsed Time 0.06 s
-[+] Throughput 1612903.25 successful requests/s
+[+] Producers 4, Consumers 4<br />
+[+] Buffer size 1000<br />
+[+] Requests 100000<br />
+<br />
+[+] Successfully consumed 100000 requests (100.0%)<br />
+[+] Elapsed Time 0.06 s<br />
+[+] Throughput 1612903.25 successful requests/s<br />
 
 (Process with Intel Core i7-6700HQ @ 2.60GHz)
 
